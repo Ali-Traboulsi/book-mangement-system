@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+      match /{document=**} {
+          allow read, write: if false;
+
+          function isAuthenticated() {
+              return request.auth != null;
+          }
+
+          function getRole (resource) {
+              return resource.data.roles[request.auth.uid];
+          }
+
+          // checks if user is authenticated and that authenticated
+          // user has appropriate role to perform an action (permissions)
+          function isOneOfRoles (resource, array) {
+              return isAuthenticated() && (getRole(resource) in array);
+          }
+
+          //      // Ensure only the Note's content has changed
+          //        function onlyBookContentChanged() {
+          //          return request.resource.data.title == resource.data.title // make sure title isn't changed
+          //          && request.resource.data.roles == resource.data.roles // make sure role isn't changed
+          //          && request.resource.data.keys() == resource.data.keys();
+          //    }
+
+
+      }
+      match /users/{userId} {
+          // a user can view all other user profiles
+          allow read: if isAuthenticated();
+
+          // a user can only edit his own profile
+          allow write: if isAuthenticated() && request.auth.uid == userId;
+      }
+
+      match /authors/{authorId} {
+          // a author can view all other author profiles
+          allow read: if isAuthenticated();
+
+          // an author can only edit his own profile
+          allow write: if isAuthenticated() && request.auth.uid == authorId;
+
+      }
+
+      match /books
+      {
+          allow read: if resource.data.published == false ;
+      }
+
+    match /books/{bookId}
+    {
+      // allow only authors and admins to create a book
+      allow create: if isOneOfRoles(resource, ['author', 'admin'])
+      && request.auth.uid == resource.data.author;
+
+      // allow authors, contributors and admins to view books even if unpublished and restrict access to regular users for published books only
+      allow read: if isOneOfRoles(resource, ['author', 'contributor', 'admin']) || resource.data.published == false;
+
+      // allow authors and admins to update all book details, while contributors can only update content 
+      allow update: if (isOneOfRoles(resource, ['author', 'admin'])
+                        && request.auth.uid == resource.data.author);
+
+      // deleting a book only allowed by an admin and an author
+      allow delete: if isOneOfRoles(resource, ['author', 'admin']) 
+      && request.auth.uid == resource.data.author;
+    }
+  }  
+}
