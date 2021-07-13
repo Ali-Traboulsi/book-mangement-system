@@ -1,11 +1,2 @@
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      
-    </div>
-  );
-}
-
+const App = (props) => props.children;
 export default App;
