@@ -23,7 +23,7 @@ const getAllBooks = async (req, res) => {
         .catch(err => {
             console.log(err);
             return res.status(500).json({
-                error: err.code
+                error: err
             });
         });
 }
@@ -66,7 +66,7 @@ const createBook = async (req, res) => {
         .catch(err => {
             return res.status(500).json({
                 message: "Something Went Wrong",
-                error: err.code
+                error: err
             })
         });
 
@@ -95,7 +95,7 @@ const deleteBook = async (req, res) => {
             console.error(err);
             return res.status(500).json({
                 message: "Error Deleting",
-                error: err.code
+                error: err
             })
         });
 }
@@ -125,7 +125,7 @@ const editBook = async (req, res) => {
             console.error(err);
             return res.status(500).json({
                 message: "error while Updating",
-                error: err.code
+                error: err
             });
         });
 }
@@ -155,7 +155,7 @@ const getAuthorBooks = (req, res) => {
             .catch(err => {
                 console.log(err);
                 return res.status(500).json({
-                    error: err.code
+                    error: err
                 });
             });
 }
@@ -176,7 +176,7 @@ const makePublished = (req, res) => {
             console.error(err);
             return res.status(201).json({
                 message: "Error when publishing",
-                error: err.message
+                error: err
             });
         });
 }

@@ -19,6 +19,17 @@ const {
     getAuthorBooks
 } = require('../functions/APIs/books')
 
+const {
+    loginUser,
+    signUpUser,
+    uploadBookImage,
+    getUserDetails
+} = require('../functions/APIs/users');
+
+
+const {
+    authorize
+} = require('./utils/auth');
 
 app.get('/books', getAllBooks);
 app.post('/books', createBook);
@@ -27,7 +38,11 @@ app.put('/books/:bookId', editBook);
 app.put('/books/publish/:bookId', makePublished);
 app.get('/books/:author', getAuthorBooks);
 
-
+// Auth Api
+app.post('/user/login', loginUser);
+app.post('/user/register', signUpUser);
+app.post('/book/image/:bookId', authorize, uploadBookImage);
+app.get('/user/:userId', getUserDetails)
 
 app.get('/', (req, res) => {
   res.json('Home');
