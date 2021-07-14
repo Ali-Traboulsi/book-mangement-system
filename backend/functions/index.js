@@ -16,7 +16,8 @@ const {
     deleteBook,
     editBook,
     makePublished,
-    getAuthorBooks
+    getAuthorBooks,
+    getAllAuthor
 } = require('../functions/APIs/books')
 
 const {
@@ -37,6 +38,7 @@ app.delete('/books/:bookId', deleteBook);
 app.put('/books/:bookId', editBook);
 app.put('/books/publish/:bookId', makePublished);
 app.get('/books/:author', getAuthorBooks);
+app.get('/authors', getAllAuthor);
 
 // Auth Api
 app.post('/user/login', loginUser);

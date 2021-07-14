@@ -9,6 +9,7 @@ import Login from "../Pages/Login/Login";
 
 import PropTypes from 'prop-types';
 import Home from "../Pages/Home/Home";
+import AuthorBooks from "../Pages/AuthorBooks/AuthorBooks";
 
 const authRoute = (Component) => () => {
     if (localStorage.getItem('access_token')) {
@@ -27,6 +28,8 @@ const Routes = props => {
                 </Route>
                 <Route path="/user/login" component={Login}/>
                 <Route path="/home" component={Home} />
+                <Route path="/author/:id" component={AuthorBooks} />
+
             </Switch>
         </Router>
     );

@@ -37,16 +37,21 @@ service cloud.firestore {
 
       match /authors/{authorId} {
           // a author can view all other author profiles
-          allow read: if isAuthenticated();
+          allow read: if true;
 
           // an author can only edit his own profile
           allow write: if isAuthenticated() && request.auth.uid == authorId;
 
       }
 
+      match /authors
+      {
+          allow read: if true ;
+      }
+
       match /books
       {
-          allow read: if resource.data.published == false ;
+          allow read: if true ;
       }
 
     match /books/{bookId}

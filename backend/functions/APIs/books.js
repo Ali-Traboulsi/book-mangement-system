@@ -2,22 +2,47 @@ const { db } = require('../utils/admin');
 
 // Fetching all the books from then database and sending the resposne back to the client
 
-const getAllBooks = async (req, res) => {
+
+const getAllAuthor = async (req, res) => {
+
+
     await db
+        .collection('authors')
+        .get()
+        .then(data => {
+            let authorData = []
+            data.forEach(doc => {
+                authorData.push({id: doc.id, ...doc.data()})
+            })
+
+            return  res.status(201).json({
+                message: "success retrieving books",
+                data: authorData,
+            });
+
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+const getAllBooks = (req, res) => {
+
+    db
         .collection('books')
-        .where("published", "==", false)
         // .orderBy('title', 'asc')
         .get()
         .then((data) => {
             const books = [];
             data.forEach((doc) => {
-                books.push({id: doc.id, ...doc.data()})
+                // authId.push(getSingleAuthor());
+                books.push({id: doc.id, ...doc.data()});
             })
             console.log(books);
 
             return  res.status(201).json({
                 message: "success retrieving books",
-                data: books
+                data: books,
             });
         })
         .catch(err => {
@@ -187,6 +212,7 @@ module.exports = {
     deleteBook,
     editBook,
     makePublished,
-    getAuthorBooks
+    getAuthorBooks,
+    getAllAuthor
 }
 

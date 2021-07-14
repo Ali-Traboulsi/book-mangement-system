@@ -54,3 +54,11 @@ export const fetchBooks = async (state, setState) => {
         console.log(err)
     }
 }
+
+export const getBooks = async () => {
+    const url = `${API_BASE_URL}/books`;
+    return await axios.get(url).then(res =>
+        res.data
+    );
+}
+

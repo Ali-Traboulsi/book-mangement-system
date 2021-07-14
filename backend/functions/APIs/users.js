@@ -227,7 +227,6 @@ const getUserDetails = (req, res) => {
 }
 
 
-
 module.exports =
     {
         loginUser,
